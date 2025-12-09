@@ -1279,11 +1279,12 @@ MonoBehaviour:
   orderGiver: {fileID: 883986647}
   centerColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   slotColor: {r: 0, g: 1, b: 1, a: 1}
-  lineColor: {r: 0, g: 1, b: 0, a: 1}
-  boundingBoxColor: {r: 1, g: 1, b: 1, a: 1}
-  directionArrowColor: {r: 1, g: 0, b: 0, a: 1}
+  boxColor: {r: 1, g: 1, b: 1, a: 1}
+  arrowColor: {r: 1, g: 0, b: 0, a: 1}
+  linkColor: {r: 0, g: 1, b: 0, a: 1}
   centerSize: 0.25
   slotSize: 0.15
+  showLinks: 0
   showBoundingBox: 1
   showDirectionArrow: 1
 --- !u!1 &936999636

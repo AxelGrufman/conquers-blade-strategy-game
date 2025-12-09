@@ -3,12 +3,15 @@ using UnityEngine;
 
 public class OrderGiver : MonoBehaviour
 {
-    public enum Orders { Hold, MoveInFormationToTarget, FollowInFormation, Charge, MoveToTarget, AttackAtWill, GuardArea, none }
+    public enum Orders { Hold, MoveInFormationToTarget, FollowInFormation, Charge, MoveToTarget, AttackAtWill, GuardArea, ReturnToMe, none }
     public enum FormationTypes { Line, Column, square }
 
     public bool IsLooseFormation = false;
+    private bool lastIsLooseFormation;
     public Orders CurrentOrder;
+    private Orders lastOrder;
     public FormationTypes CurrentFormation;
+    private FormationTypes lastFormation;
 
     public GameObject TempTarget;
     public GameObject Player;
@@ -21,52 +24,107 @@ public class OrderGiver : MonoBehaviour
     public List<GameObject> Units = new List<GameObject>();
 
 
-    private void Awake()
+
+    private void Start()
     {
-        // Initialize Units from TempUnitParent
         foreach (Transform child in TempUnitParent.transform)
         {
             Units.Add(child.gameObject);
         }
-    }
 
+        lastOrder = CurrentOrder;
+        lastFormation = CurrentFormation;
+        lastIsLooseFormation = IsLooseFormation;
+
+  
+        ApplyOrder(CurrentOrder, true, true);
+    }
     private void Update()
     {
-        switch (CurrentOrder)
+        bool orderChanged = CurrentOrder != lastOrder;
+        bool formationChanged = CurrentFormation != lastFormation ||
+                                IsLooseFormation != lastIsLooseFormation;
+
+        if (orderChanged || formationChanged)
+        {
+            ApplyOrder(CurrentOrder, orderChanged, formationChanged);
+
+            lastOrder = CurrentOrder;
+            lastFormation = CurrentFormation;
+            lastIsLooseFormation = IsLooseFormation;
+        }
+
+        if (CurrentOrder == Orders.FollowInFormation)
+        {
+            FollowInFormation(Player.transform.position);
+        }
+    }
+
+    private void ApplyOrder(Orders order, bool orderChanged, bool formationChanged)
+    {
+        switch (order)
         {
             case Orders.Hold:
-                HoldPosition();
+                if (orderChanged || formationChanged)
+                    HoldPosition();
                 break;
+
             case Orders.MoveInFormationToTarget:
-                MoveInFormationToTarget(TempTarget.transform.position);
+                if (orderChanged || formationChanged)
+                    MoveInFormationToTarget(TempTarget.transform.position);
                 break;
+
             case Orders.FollowInFormation:
-                FollowInFormation(Player.transform.position);
+                if (formationChanged)
+                    FollowInFormation(Player.transform.position);
                 break;
-            case Orders.Charge:
-                ChargeAtTarget(TempTarget);
+
+            case Orders.ReturnToMe:
+                if (orderChanged || formationChanged)
+                    ReturnToMe();
                 break;
+
             case Orders.MoveToTarget:
-                GiveOrder_Movement(TempTarget.transform.position);
+                if (orderChanged)
+                    GiveOrder_Movement(TempTarget.transform.position);
                 break;
+
+            case Orders.Charge:
+                if (orderChanged)
+                    ChargeAtTarget(TempTarget);
+                break;
+
             case Orders.AttackAtWill:
-                AttackAtWill();
+                if (orderChanged)
+                    AttackAtWill();
                 break;
+
             case Orders.GuardArea:
-                GuardArea(TempTarget.transform.position, 10f);
+                if (orderChanged)
+                    GuardArea(TempTarget.transform.position, 10f);
                 break;
         }
     }
 
+
+
     public Vector3 GetSquadCenter()
     {
+        if (Units.Count == 0)
+            return transform.position;
+
         Vector3 sum = Vector3.zero;
-
+        int aliveCount = 0;
         foreach (var u in Units)
+        {
+            if (u == null) continue;
             sum += u.transform.position;
+            aliveCount++;
+        }
 
-        return sum / Units.Count;
+        return aliveCount > 0 ? sum / aliveCount : transform.position;
     }
+
 
     private Quaternion GetFormationRotation()
     {
@@ -134,8 +192,39 @@ public class OrderGiver : MonoBehaviour
             u.GetComponent<UnitAI>().Attack(target);
     }
 
-    private void AttackAtWill() { }
-    private void GuardArea(Vector3 c, float r) { }
+    private void AttackAtWill()
+    {
+        foreach (var u in Units)
+        {
+            var ai = u.GetComponent<UnitAI>();
+            ai.EnableAttackAtWill();
+        }
+    }
+
+    private void GuardArea(Vector3 center, float radius)
+    {
+        foreach (var u in Units)
+        {
+            var ai = u.GetComponent<UnitAI>();
+            ai.SetGuardArea(center, radius);
+        }
+    }
+
+
+    private void ReturnToMe()
+    {
+        Vector3 center = Player.transform.position;
+        Quaternion rot = GetFormationRotation();
+        Vector3[] slots = GetSlots(center, rot);
+        var assigned = AssignNearestSlots(slots);
+
+        foreach (var u in Units)
+        {
+            Vector3 slot = assigned[u];
+            u.GetComponent<UnitAI>().ReturnToFormation(slot);
+        }
+    }
+
 
     private Vector3[] GetSlots(Vector3 centerPos, Quaternion rot)
     {

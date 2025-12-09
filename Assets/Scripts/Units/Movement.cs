@@ -2,7 +2,7 @@ using UnityEngine;
 using Unity.AI;
 using UnityEngine.AI;
 
-public class Movment : MonoBehaviour
+public class Movement : MonoBehaviour
 {
     [SerializeField] private float speed = 5f;
     NavMeshAgent agent;
