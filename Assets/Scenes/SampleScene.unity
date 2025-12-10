@@ -183,6 +183,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitAI
   State: 0
+  detectionRadius: 10
+  attackRange: 2
+  maxChaseDistance: 15
 --- !u!195 &62018467
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -349,6 +352,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitAI
   State: 0
+  detectionRadius: 10
+  attackRange: 2
+  maxChaseDistance: 15
 --- !u!195 &108310797
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -893,6 +899,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitAI
   State: 0
+  detectionRadius: 10
+  attackRange: 2
+  maxChaseDistance: 15
 --- !u!195 &772999368
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1059,6 +1068,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitAI
   State: 0
+  detectionRadius: 10
+  attackRange: 2
+  maxChaseDistance: 15
 --- !u!195 &787052245
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1242,7 +1254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsLooseFormation: 0
   CurrentOrder: 0
-  CurrentFormation: 0
+  CurrentFormation: 2
   TempTarget: {fileID: 1049946239}
   Player: {fileID: 128700031}
   LineWidth: 10
@@ -1351,6 +1363,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitAI
   State: 0
+  detectionRadius: 10
+  attackRange: 2
+  maxChaseDistance: 15
 --- !u!195 &936999640
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1517,6 +1532,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitAI
   State: 0
+  detectionRadius: 10
+  attackRange: 2
+  maxChaseDistance: 15
 --- !u!195 &1006141028
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1683,6 +1701,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitAI
   State: 0
+  detectionRadius: 10
+  attackRange: 2
+  maxChaseDistance: 15
 --- !u!195 &1024429853
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1961,6 +1982,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitAI
   State: 0
+  detectionRadius: 10
+  attackRange: 2
+  maxChaseDistance: 15
 --- !u!195 &1191947285
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2127,6 +2151,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitAI
   State: 0
+  detectionRadius: 10
+  attackRange: 2
+  maxChaseDistance: 15
 --- !u!195 &1576251969
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2541,6 +2568,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitAI
   State: 0
+  detectionRadius: 10
+  attackRange: 2
+  maxChaseDistance: 15
 --- !u!1 &1864707416
 GameObject:
   m_ObjectHideFlags: 0
@@ -2605,6 +2635,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitAI
   State: 0
+  detectionRadius: 10
+  attackRange: 2
+  maxChaseDistance: 15
 --- !u!195 &1864707420
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2771,6 +2804,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitAI
   State: 0
+  detectionRadius: 10
+  attackRange: 2
+  maxChaseDistance: 15
 --- !u!195 &1902692640
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2981,6 +3017,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitAI
   State: 0
+  detectionRadius: 10
+  attackRange: 2
+  maxChaseDistance: 15
 --- !u!195 &2029363103
 NavMeshAgent:
   m_ObjectHideFlags: 0

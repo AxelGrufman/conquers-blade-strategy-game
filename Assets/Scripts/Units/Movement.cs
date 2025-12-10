@@ -13,12 +13,12 @@ public class Movement : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         agent.speed = speed;
-        agent.stoppingDistance = 0f;        // IMPORTANT
-        agent.autoBraking = false;          // STOPS WEIRD DECELERATION
-        agent.updateRotation = false;       // We control rotation manually
+        agent.stoppingDistance = 0f;
+        agent.autoBraking = false;          
+        agent.updateRotation = false;     
     }
 
-
+    
 
     public void MoveTo(Vector3 targetPosition)
     {

@@ -35,7 +35,7 @@ public class UnitAI : MonoBehaviour
 
     private void Update()
     {
-        // Behaviour based on state
+    
         switch (State)
         {
             case UnitState.Holding:
@@ -50,7 +50,7 @@ public class UnitAI : MonoBehaviour
                 break;
         }
 
-        // Rotate with movement for movement-type states
+
         switch (State)
         {
             case UnitState.Following:
@@ -99,39 +99,34 @@ public class UnitAI : MonoBehaviour
         SetState(UnitState.Attacking);
     }
 
-    // Called by OrderGiver.AttackAtWill()
+
     public void EnableAttackAtWill()
     {
         State = UnitState.AttackAtWill;
-        // Optional: remember starting position
+  
         guardCenter = transform.position;
-        guardRadius = maxChaseDistance;   // acts as a loose leash
+        guardRadius = maxChaseDistance;
     }
 
-    // Called by OrderGiver.GuardArea()
+
     public void SetGuardArea(Vector3 center, float radius)
     {
         guardCenter = center;
         guardRadius = radius;
         State = UnitState.Guarding;
 
-        // Move to somewhere inside that guard area (you could do formation slots too)
+
         movement.MoveTo(guardCenter);
     }
 
-    // --------------------------------------------------------------------
-    // COMBAT / DETECTION
-    // --------------------------------------------------------------------
     private void HandleCombatLogic()
     {
-        // 1. Make sure we have a target
         if (currentTarget == null || !IsEnemyValid(currentTarget))
         {
             currentTarget = FindClosestEnemy();
 
             if (currentTarget == null)
             {
-                // No enemies found
                 if (State == UnitState.Guarding)
                     ReturnTowardsGuardCenter();
 
@@ -139,26 +134,22 @@ public class UnitAI : MonoBehaviour
             }
         }
 
-        // 2. Act on that target
         float dist = Vector3.Distance(transform.position, currentTarget.transform.position);
 
         if (dist <= attackRange)
         {
-            // TODO: play attack animation / deal damage
-            // For now just face it and stand still
             movement.Stop();
             FaceTarget(currentTarget.transform.position);
         }
         else
         {
-            // Chase if allowed
             if (CanChaseTarget(currentTarget.transform.position))
             {
                 movement.MoveTo(currentTarget.transform.position);
             }
             else
             {
-                // Too far / outside leash, drop target
+ 
                 currentTarget = null;
 
                 if (State == UnitState.Guarding)
@@ -169,16 +160,14 @@ public class UnitAI : MonoBehaviour
 
     private void HandleReturnToFormation()
     {
-        // When close enough to destination, you can switch to Holding or Idle
         if (movement.GetVelocity().sqrMagnitude < 0.01f)
         {
-            State = UnitState.Holding; // or Idle
+            State = UnitState.Holding; 
         }
     }
 
     private GameObject FindClosestEnemy()
     {
-        // SUPER SIMPLE – replace with your own enemy list or layer mask
         Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, LayerMask.GetMask("Enemy"));
         float bestDist = Mathf.Infinity;
         GameObject best = null;
@@ -199,17 +188,14 @@ public class UnitAI : MonoBehaviour
     private bool IsEnemyValid(GameObject enemy)
     {
         if (!enemy) return false;
-        // You can add HP / alive checks here
         return true;
     }
 
     private bool CanChaseTarget(Vector3 targetPos)
     {
-        // For AttackAtWill, they can roam quite far.
         if (State == UnitState.AttackAtWill)
             return Vector3.Distance(transform.position, guardCenter) <= maxChaseDistance * 2f;
 
-        // For Guarding, don't go too far from guardCenter
         if (State == UnitState.Guarding)
             return Vector3.Distance(guardCenter, targetPos) <= guardRadius + maxChaseDistance;
 

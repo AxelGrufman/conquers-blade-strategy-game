@@ -5,9 +5,6 @@ public static class FormationGenerator
     public static float TightSpacing = 1.5f;
     public static float LooseSpacing = 3.0f;
 
-    // ---------------------------------------------------
-    // 1. LINE FORMATION (multiple rows)
-    // ---------------------------------------------------
     public static Vector3[] GetLineFormation(int count, int unitsPerRow, Vector3 center, Quaternion rotation, bool loose = false)
     {
         float spacing = loose ? LooseSpacing : TightSpacing;
@@ -30,9 +27,6 @@ public static class FormationGenerator
         return slots;
     }
 
-    // ---------------------------------------------------
-    // 2. COLUMN FORMATION (multiple rows stacked)
-    // ---------------------------------------------------
     public static Vector3[] GetColumnFormation(
      int count, int height, Vector3 center, bool loose, Quaternion rot)
     {
@@ -55,10 +49,6 @@ public static class FormationGenerator
         return slots;
     }
 
-
-    // ---------------------------------------------------
-    // 3. PERFECT SQUARE FORMATION
-    // ---------------------------------------------------
     public static Vector3[] GetSquareFormation(int count, Vector3 center, bool loose, Quaternion rot)
     {
         float spacing = loose ? LooseSpacing : TightSpacing;

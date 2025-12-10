@@ -265,7 +265,6 @@ public class OrderGiver : MonoBehaviour
     {
         Dictionary<GameObject, Vector3> result = new Dictionary<GameObject, Vector3>();
 
-        // Create a list we can remove from
         List<Vector3> remainingSlots = new List<Vector3>(slots);
 
         foreach (var unit in Units)
@@ -273,7 +272,6 @@ public class OrderGiver : MonoBehaviour
             Vector3 bestSlot = remainingSlots[0];
             float bestDist = Vector3.Distance(unit.transform.position, bestSlot);
 
-            // Find nearest
             for (int i = 1; i < remainingSlots.Count; i++)
             {
                 float dist = Vector3.Distance(unit.transform.position, remainingSlots[i]);
@@ -285,7 +283,7 @@ public class OrderGiver : MonoBehaviour
             }
 
             result[unit] = bestSlot;
-            remainingSlots.Remove(bestSlot); // remove so no one else uses it
+            remainingSlots.Remove(bestSlot);
         }
 
         return result;

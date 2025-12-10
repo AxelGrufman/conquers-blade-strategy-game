@@ -25,33 +25,20 @@ public class FormationGizmoDrawer : MonoBehaviour
         if (!orderGiver || orderGiver.Units == null || orderGiver.Units.Count == 0)
             return;
 
-        // -------------------------------
-        // GET FORMATION CENTER
-        // -------------------------------
         Vector3 center = (orderGiver.CurrentOrder == OrderGiver.Orders.FollowInFormation)
             ? orderGiver.Player.transform.position
             : orderGiver.GetSquadCenter();
 
-        // Draw center
         Gizmos.color = centerColor;
         Gizmos.DrawSphere(center, centerSize);
 
-        // -------------------------------
-        // GET FORMATION ROTATION
-        // -------------------------------
         Quaternion rot = Quaternion.LookRotation(orderGiver.Player.transform.forward);
 
-        // -------------------------------
-        // GET FORMATION SLOTS
-        // -------------------------------
         Vector3[] slots = GetSlots(center, rot);
 
         if (slots == null || slots.Length == 0)
             return;
 
-        // -------------------------------
-        // DRAW SLOTS + LINKS
-        // -------------------------------
         for (int i = 0; i < slots.Length; i++)
         {
             Gizmos.color = slotColor;
@@ -64,15 +51,10 @@ public class FormationGizmoDrawer : MonoBehaviour
             }
         }
 
-        // -------------------------------
-        // DRAW BOUNDING BOX
-        // -------------------------------
         if (showBoundingBox)
             DrawBoundingBox(slots);
 
-        // -------------------------------
-        // DRAW DIRECTION ARROW
-        // -------------------------------
+ 
         if (showDirectionArrow)
             DrawDirectionArrow(center);
     }
@@ -111,9 +93,6 @@ public class FormationGizmoDrawer : MonoBehaviour
         return null;
     }
 
-    // --------------------------------------------------------------------
-    // BOUNDING BOX
-    // --------------------------------------------------------------------
     private void DrawBoundingBox(Vector3[] slots)
     {
         float minX = float.MaxValue;
@@ -141,9 +120,7 @@ public class FormationGizmoDrawer : MonoBehaviour
         Gizmos.DrawLine(p4, p1);
     }
 
-    // --------------------------------------------------------------------
-    // FACING DIRECTION ARROW
-    // --------------------------------------------------------------------
+
     private void DrawDirectionArrow(Vector3 center)
     {
         if (!orderGiver.Player)
