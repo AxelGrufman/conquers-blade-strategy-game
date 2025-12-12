@@ -15,13 +15,17 @@ public class OrderGiver : MonoBehaviour
 
     public GameObject TempTarget;
     public GameObject Player;
+    public FormationAnchor formationAnchor;
 
     public int LineWidth = 10;
     public int ColumnWidth = 3;
 
     public GameObject TempUnitParent;
 
+
+
     public List<GameObject> Units = new List<GameObject>();
+    private Dictionary<GameObject, int> unitToSlotIndex = new Dictionary<GameObject, int>();
 
 
 
@@ -58,6 +62,12 @@ public class OrderGiver : MonoBehaviour
         {
             FollowInFormation(Player.transform.position);
         }
+
+        if (CurrentOrder == Orders.MoveInFormationToTarget)
+        {
+            MoveInFormationToTarget();
+        }
+
     }
 
     private void ApplyOrder(Orders order, bool orderChanged, bool formationChanged)
@@ -71,12 +81,16 @@ public class OrderGiver : MonoBehaviour
 
             case Orders.MoveInFormationToTarget:
                 if (orderChanged || formationChanged)
-                    MoveInFormationToTarget(TempTarget.transform.position);
+                    StartMoveInFormationToTarget(TempTarget.transform.position);
                 break;
 
             case Orders.FollowInFormation:
-                if (formationChanged)
-                    FollowInFormation(Player.transform.position);
+                if (formationChanged || orderChanged)
+                {
+                    Quaternion rot = GetFormationRotation();
+                    Vector3[] slots = GetSlots(Player.transform.position, rot);
+                    AssignFixedSlotIndices(slots);
+                }
                 break;
 
             case Orders.ReturnToMe:
@@ -152,39 +166,62 @@ public class OrderGiver : MonoBehaviour
         }
     }
 
-
-
-    private void MoveInFormationToTarget(Vector3 point)
+    private void StartMoveInFormationToTarget(Vector3 targetPoint)
     {
-        Quaternion rot = GetFormationRotation();
-        Vector3[] slots = GetSlots(point, rot);
+        if (!formationAnchor) return;
 
-        var assigned = AssignNearestSlots(slots);
+        formationAnchor.transform.position = GetSquadCenter();
+        formationAnchor.MoveTo(targetPoint);
+
+        Quaternion rot = GetFormationRotation();
+        Vector3[] slots = GetSlots(formationAnchor.Position, rot);
+
+        AssignFixedSlotIndices(slots);
+
+        MoveInFormationToTarget();
+    }
+
+    private void MoveInFormationToTarget()
+    {
+        if (!formationAnchor) return;
+
+        // If anchor reached destination, switch to Hold in formation
+        if (formationAnchor.HasReached())
+        {
+            HoldPosition();
+            CurrentOrder = Orders.Hold;
+            return;
+        }
+
+        // Formation center & facing comes from anchor
+        Quaternion rot = Quaternion.LookRotation(formationAnchor.Forward, Vector3.up);
+        Vector3[] slots = GetSlots(formationAnchor.Position, rot);
 
         foreach (var u in Units)
         {
-            Vector3 slot = assigned[u];
-            u.GetComponent<UnitAI>().GoTo(slot);
+            if (u == null) continue;
+            if (!unitToSlotIndex.TryGetValue(u, out int index)) continue;
+            if (index < 0 || index >= slots.Length) continue;
+
+            Vector3 slot = slots[index];
+            u.GetComponent<UnitAI>().FollowFormationSlot(slot);
         }
     }
-
-
-
     private void FollowInFormation(Vector3 playerPos)
     {
         Quaternion rot = GetFormationRotation();
         Vector3[] slots = GetSlots(playerPos, rot);
 
-        var assigned = AssignNearestSlots(slots);
-
         foreach (var u in Units)
         {
-            Vector3 slot = assigned[u];
+            if (u == null) continue;
+            if (!unitToSlotIndex.TryGetValue(u, out int index)) continue;
+            if (index < 0 || index >= slots.Length) continue;
+
+            Vector3 slot = slots[index];
             u.GetComponent<UnitAI>().FollowFormationSlot(slot);
         }
     }
-
-
 
     private void ChargeAtTarget(GameObject target)
     {
@@ -289,5 +326,35 @@ public class OrderGiver : MonoBehaviour
         return result;
     }
 
+    private void AssignFixedSlotIndices(Vector3[] slots)
+    {
+        unitToSlotIndex.Clear();
+
+        // Start from nearest to minimize initial movement
+        List<Vector3> remainingSlots = new List<Vector3>(slots);
+
+        foreach (var unit in Units)
+        {
+            if (unit == null) continue;
+
+            int bestIndex = 0;
+            float bestDist = Vector3.Distance(unit.transform.position, remainingSlots[0]);
+
+            for (int i = 1; i < remainingSlots.Count; i++)
+            {
+                float dist = Vector3.Distance(unit.transform.position, remainingSlots[i]);
+                if (dist < bestDist)
+                {
+                    bestDist = dist;
+                    bestIndex = i;
+                }
+            }
+
+            int globalIndex = System.Array.IndexOf(slots, remainingSlots[bestIndex]);
+            unitToSlotIndex[unit] = globalIndex;
+
+            remainingSlots.RemoveAt(bestIndex);
+        }
+    }
 
 }

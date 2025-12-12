@@ -58,6 +58,9 @@ public class UnitAI : MonoBehaviour
             case UnitState.Holding:
             case UnitState.Guarding:
             case UnitState.AttackAtWill:
+            case UnitState.Attacking:
+                AlignRotationToMovement();
+                break;
             case UnitState.ReturningToFormation:
                 AlignRotationToMovement();
                 break;
