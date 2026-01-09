@@ -30,35 +30,35 @@ public class RotatePlanetEditor : Editor
         }
         GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Toggle(script.CurrentOrder == OrderGiver.Orders.Charge, "Charge", "Button"))
-        {
-            script.CurrentOrder = OrderGiver.Orders.Charge;
-        }
-        if (GUILayout.Toggle(script.CurrentOrder == OrderGiver.Orders.MoveToTarget, "Move To Target", "Button"))
-        {
-            script.CurrentOrder = OrderGiver.Orders.MoveToTarget;
-        }
-        if (GUILayout.Toggle(script.CurrentOrder == OrderGiver.Orders.AttackAtWill, "Attack At Will", "Button"))
-        {
-            script.CurrentOrder = OrderGiver.Orders.AttackAtWill;
-        }
-        GUILayout.EndHorizontal();
+        //GUILayout.BeginHorizontal();
+        //if (GUILayout.Toggle(script.CurrentOrder == OrderGiver.Orders.Charge, "Charge", "Button"))
+        //{
+        //    script.CurrentOrder = OrderGiver.Orders.Charge;
+        //}
+        //if (GUILayout.Toggle(script.CurrentOrder == OrderGiver.Orders.MoveToTarget, "Move To Target", "Button"))
+        //{
+        //    script.CurrentOrder = OrderGiver.Orders.MoveToTarget;
+        //}
+        //if (GUILayout.Toggle(script.CurrentOrder == OrderGiver.Orders.AttackAtWill, "Attack At Will", "Button"))
+        //{
+        //    script.CurrentOrder = OrderGiver.Orders.AttackAtWill;
+        //}
+        //GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Toggle(script.CurrentOrder == OrderGiver.Orders.GuardArea, "Guard Area", "Button"))
-        {
-            script.CurrentOrder = OrderGiver.Orders.GuardArea;
-        }
-        if (GUILayout.Toggle(script.CurrentOrder == OrderGiver.Orders.none, "Coming soon", "Button"))
-        {
-            script.CurrentOrder = OrderGiver.Orders.none;
-        }
-        if (GUILayout.Toggle(script.CurrentOrder == OrderGiver.Orders.none, "Coming soon", "Button"))
-        {
-            script.CurrentOrder = OrderGiver.Orders.none;
-        }
-        GUILayout.EndHorizontal();
+        //GUILayout.BeginHorizontal();
+        //if (GUILayout.Toggle(script.CurrentOrder == OrderGiver.Orders.GuardArea, "Guard Area", "Button"))
+        //{
+        //    script.CurrentOrder = OrderGiver.Orders.GuardArea;
+        //}
+        //if (GUILayout.Toggle(script.CurrentOrder == OrderGiver.Orders.none, "Coming soon", "Button"))
+        //{
+        //    script.CurrentOrder = OrderGiver.Orders.none;
+        //}
+        //if (GUILayout.Toggle(script.CurrentOrder == OrderGiver.Orders.none, "Coming soon", "Button"))
+        //{
+        //    script.CurrentOrder = OrderGiver.Orders.none;
+        //}
+        //GUILayout.EndHorizontal();
 
         GUILayout.Label("Formation", EditorStyles.boldLabel);
 
@@ -79,7 +79,7 @@ public class RotatePlanetEditor : Editor
 
         if (EditorGUI.EndChangeCheck())
         {
-            EditorUtility.SetDirty(script); // Ensures edit-mode changes are saved
+            EditorUtility.SetDirty(script); 
         }
     }
 }

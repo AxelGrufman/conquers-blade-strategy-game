@@ -4,9 +4,8 @@ using UnityEngine.AI;
 
 public class Movement : MonoBehaviour
 {
-    [SerializeField] private float speed = 5f;
-    NavMeshAgent agent;
-    [SerializeField] private int Id;
+    public float speed = 5f;
+   private NavMeshAgent agent;
 
 
     private void Awake()
@@ -14,11 +13,9 @@ public class Movement : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.speed = speed;
         agent.stoppingDistance = 0f;
-        agent.autoBraking = false;          
-        agent.updateRotation = false;     
-    }
-
-    
+        agent.autoBraking = false;
+        //agent.updateRotation = false;     
+    }    
 
     public void MoveTo(Vector3 targetPosition)
     {
@@ -30,14 +27,15 @@ public class Movement : MonoBehaviour
         agent.isStopped = true;
         agent.ResetPath();
     }
-
     public Vector3 GetVelocity()
     {
         return agent.velocity;
     }
-
-
-
+    private void Update()
+    {
+       Vector3 SpawnLocation = transform.position - transform.forward * 0.5f + Vector3.up * 0.5f;
+        Debug.DrawRay(SpawnLocation, transform.forward * 2f, Color.black);
+    }
 }
 
 
